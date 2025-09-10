@@ -2,8 +2,8 @@
 set -euo pipefail
 
 # build.sh - build all components
-go build -o split split/main.go
-echo "[+] built ./split"
+go build -o split/split ./split
+echo "[+] built ./split/split"
 sleep 1
-go build -o analize analize/main.go
-echo "[+] built ./analize"
+go build -o analize/analize ./analize
+echo "[+] built ./analize/analize"
