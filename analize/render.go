@@ -133,6 +133,9 @@ func renderTXT(a *Analysis) string {
 		for _, s := range a.Silence {
 			fmt.Fprintf(&b, "  %.3f → %.3f (%.3fs)\n", s.Start, s.End, s.End-s.Start)
 		}
+		if a.SilenceTotal != nil {
+			fmt.Fprintf(&b, "Total silence: %.3fs\n", *a.SilenceTotal)
+		}
 		if a.SilenceRatio != nil {
 			fmt.Fprintf(&b, "Silence ratio: %.2f%% of duration\n", *a.SilenceRatio*100)
 		}
@@ -266,6 +269,9 @@ func renderMD(a *Analysis) string {
 		fmt.Fprintf(&b, "## Silence\n")
 		for _, s := range a.Silence {
 			fmt.Fprintf(&b, "- `%.3f → %.3f` (%.3fs)\n", s.Start, s.End, s.End-s.Start)
+		}
+		if a.SilenceTotal != nil {
+			fmt.Fprintf(&b, "- Total silence: `%.3fs`\n", *a.SilenceTotal)
 		}
 		if a.SilenceRatio != nil {
 			fmt.Fprintf(&b, "- Silence ratio: `%.2f%%`\n", *a.SilenceRatio*100)

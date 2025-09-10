@@ -20,6 +20,8 @@ func main() {
 	noEbu := flag.Bool("no-ebur128", false, "disable LUFS ebur128/true peak")
 	astWin := flag.Float64("astats-window", 0.0, "astats window sec (0=overall)")
 	silTh := flag.Float64("silence-threshold", cfg.SilThresDB, "silence threshold dBFS")
+	splitSec := flag.Float64("split-on-silence", 0.0, "split input on silence >= seconds (0=off)")
+	trimSec := flag.Float64("trim-ends", 0.0, "trim this many seconds from start/end of segments")
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "analit — overkill audio analysis\n\n")
 		fmt.Fprintf(os.Stderr, "Usage:\n  analit full <input> [flags]\n  analit compare <inputA> <inputB> [flags]\n\n")
@@ -71,6 +73,11 @@ func main() {
 			fail("write: %v", err)
 		}
 		fmt.Printf("[+] wrote %s\n", cfg.OutPath)
+		if *splitSec > 0 {
+			if _, err := splitBySilence(cfg, in, a, *splitSec, *trimSec); err != nil {
+				fail("split: %v", err)
+			}
+		}
 
 	case "compare":
 		if len(args) < 3 {

@@ -92,6 +92,7 @@ type Analysis struct {
 	Key          *KeyInfo
 	Silence      []SilenceSpan
 	SilenceRatio *float64
+	SilenceTotal *float64
 	Notes        []string // warnings/suggestions
 }
 
