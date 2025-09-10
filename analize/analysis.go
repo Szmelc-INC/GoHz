@@ -58,13 +58,17 @@ func analyzeFile(cfg *Config, in string) (*Analysis, error) {
 
 	sil, _ := detectSilences(cfg, in)
 	var silRatio *float64
-	if len(sil) > 0 && probe.Duration > 0 {
+	var silTotal *float64
+	if len(sil) > 0 {
 		var dur float64
 		for _, sp := range sil {
 			dur += sp.End - sp.Start
 		}
-		v := (dur / probe.Duration)
-		silRatio = &v
+		silTotal = &dur
+		if probe.Duration > 0 {
+			v := dur / probe.Duration
+			silRatio = &v
+		}
 	}
 
 	var tempo *TempoStats
@@ -104,6 +108,6 @@ func analyzeFile(cfg *Config, in string) (*Analysis, error) {
 		File: in, When: time.Now().Format(time.RFC3339),
 		Probe: probe, Level: lv, Loudness: lufs, Stereo: st, Spectral: spec,
 		Bands: bands, Tempo: tempo, Pitch: ps, Key: key,
-		Silence: sil, SilenceRatio: silRatio, Notes: notes,
+		Silence: sil, SilenceRatio: silRatio, SilenceTotal: silTotal, Notes: notes,
 	}, nil
 }
